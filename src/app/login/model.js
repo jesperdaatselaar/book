@@ -1,5 +1,19 @@
-module.exports = (sequelize, Sequelize) => {
-  const User = sequelize.define("users", {
+const config = require("../config/db.js");
+const Sequelize = require("sequelize");
+
+const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
+  host: config.HOST,
+  dialect: config.dialect,
+  operatorsAliases: false,
+});
+
+const db = {};
+
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
+
+const userModel = (sequelize, Sequelize) => {
+  return sequelize.define("users", {
     firstName: {
       type: Sequelize.STRING,
     },
@@ -13,6 +27,8 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING,
     },
   });
-
-  return User;
 };
+
+db.user = userModel(sequelize, Sequelize);
+
+module.exports = db;
