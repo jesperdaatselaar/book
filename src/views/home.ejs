@@ -5,15 +5,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
     <script src="https://kit.fontawesome.com/6c19e31162.js" crossorigin="anonymous"></script>
 </head>
 
 <body style="overflow: hidden">
     <header class="hero is-small is-black">
         <div class="hero-body">
-            <h1 class="title is-5">Welkom bij</h1>
-            <h1 class="subtitle is-5">Praktijk Raccoon</h1>
+            <div class="level">
+                <div class="level-left">
+                    <div class="container">
+                        <h1 class="title is-5">Welkom bij</h1>
+                        <h1 class="subtitle is-5">Praktijk Raccoon</h1>
+                    </div>
+                </div>
+                <div class="level-right">
+                    <a href="/admin" class="button is-info">Inloggen als administrator</a>
+                </div>
+            </div>
         </div>
     </header>
     <section class="section">
@@ -21,23 +30,34 @@
             <div class="column is-3">
                 <h1 class="title is-5">Beschikbare tijdsloten</b></h1>
                 <form id="getTime" action="/" method="post"></form>
-                    <label class="label">Dag</label>
+                <label class="label">Dag</label>
+                <div class="field is-grouped">
+                    <div class="control">
+                        <input form="getTime" class="input" type="date" />
+                    </div>
+                    <div class="control">
+                        <input form="getTime" class="button is-info" type="submit" value="Zoek" />
+                    </div>
+                </div>
+
+                <form id="bookTime" action="/" method="post">
                     <div class="field is-grouped">
                         <div class="control">
-                            <input form="getTime" class="input" type="date" />
+                            <label class="label">Tijd</label>
+                            <div class="select">
+                                <select name="freeSlots" id="#">
+                                    <option value="tijdslot1">14.00</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="control">
-                            <input form="getTime" class="button is-info" type="submit" value="Zoek" />
-                        </div>
-                    </div>
-                
-                <form id="bookTime" action="/" method="post">
-                    <div class="field">
-                        <label class="label">Tijd</label>
-                        <div class="select">
-                            <select name="freeSlots" id="#">
-                                <option value="tijdslot1">14.00</option>
-                            </select>
+                            <label class="label">Behandeling</label>
+                            <div class="select">
+                                <select name="freeSlots" id="#">
+                                    <option value="acupunctuur">Acupunctuur</option>
+                                    <option value="voetreflex">Voetreflex</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="field">
