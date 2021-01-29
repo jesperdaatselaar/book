@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="/node_modules/bulma/css/bulma.min.css" />
+    <script src="https://kit.fontawesome.com/6c19e31162.js" crossorigin="anonymous"></script>
+</head>
+
+<body style="overflow: hidden">
+    <header class="hero is-small is-black">
+        <div class="hero-body">
+            <h1 class="title is-5">Welkom bij</h1>
+            <h1 class="subtitle is-5">Praktijk Raccoon</h1>
+        </div>
+    </header>
+    <section class="section">
+        <div class="columns is-variable is-8 is-centered">
+            <div class="column is-3">
+                <h1 class="title is-5">Beschikbare tijdsloten</b></h1>
+                <form id="getTime" action="/" method="post"></form>
+                    <label class="label">Dag</label>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <input form="getTime" class="input" type="date" />
+                        </div>
+                        <div class="control">
+                            <input form="getTime" class="button is-info" type="submit" value="Zoek" />
+                        </div>
+                    </div>
+                
+                <form id="bookTime" action="/" method="post">
+                    <div class="field">
+                        <label class="label">Tijd</label>
+                        <div class="select">
+                            <select name="freeSlots" id="#">
+                                <option value="tijdslot1">14.00</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Naam</label>
+                        <div class="control">
+                            <input type="text" class="input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control">
+                            <input type="text" class="input">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="control">
+                            <input form="getTime" class="button is-info" type="submit" value="Maak Afspraak" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="column is-3">
+                <h1 class="title is-5">Openingstijden</h1>
+                <ul>
+                    <li>Maandag</li>
+                    <li>Dinsdag</li>
+                    <li>Woensdag</li>
+                    <li>Donderdag</li>
+                    <li>Vrijdag</li>
+                    <li>Zaterdag</li>
+                    <li>Zondag</li>
+                </ul>
+            </div>
+            <div class="column is-3">
+                <h1 class="title is-5">Contact</h1>
+                <p>0344000000</p>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>
