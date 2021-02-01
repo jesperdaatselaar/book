@@ -29,7 +29,7 @@
         <div class="columns is-variable is-8 is-centered">
             <div class="column is-3">
                 <h1 class="title is-5">Zoek afspraken</b></h1>
-                <form action="/admin/dashboard/" method="get">
+                <form action="/admin/dashboard/" method="post">
                     <label class="label">Dag</label>
                     <div class="field is-grouped">
                         <div class="control">
@@ -42,7 +42,7 @@
                 </form>
                 <br>
                 <h1 class="title is-5">Maak een tijdslot</b></h1>
-                <form action="/" method="POST">
+                <form action="/admin/create" method="POST">
                     <label class="label">Van</label>
                     <div class="field">
                         <div class="control">
@@ -75,13 +75,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>12-02-2020</td>
-                            <td>14:00</td>
-                            <td>Bert van Sesamstraat</td>
-                            <td>bertnieternie@sesamstraat.nl</td>
-                            <td>Voetreflex</td>
-                        </tr>
+                        <% console.log(events) %>
+                            <% if (events.length> 0) { %>
+                                <% for(var i=0; i < events.length; i++) { %>
+                                    <tr>
+                                        <td>
+                                            <%= new Date(events[i].start.dateTime).toLocaleDateString() %>
+                                        </td>
+                                        <td>
+                                            <%= new Date(events[i].start.dateTime).toLocaleTimeString() %>
+                                        </td>
+                                        <td>
+                                            No Name
+                                        </td>
+                                        <td>
+                                            <%= events[i].attendees[0].email %>
+                                        </td>
+                                        <td>
+                                            <%= events[i].summary %>
+                                        </td>
+                                    </tr>
+                                    <% } %>
+                                        <% } %>
                     </tbody>
                 </table>
             </div>

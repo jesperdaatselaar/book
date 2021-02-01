@@ -58,16 +58,68 @@ exports.signout = (req, res) => {
 };
 
 exports.getAvailableByDay = async (req, res) => {
-  let date = Date.parse(req.body.day);
+  let day = req.body.day;
+  let date = Date.parse(day);
+  if (!day) {
+    console.log("No day");
+    return res.render("home", { events: [] });
+  }
   const events = await calendar.getByDate(date);
+  console.log(req.body.day);
   const freeEvents = [];
-
-  for (let i = 0; i < events.data.items.length; i++) {
-    const element = events.data.items[i];
-    if (!events.data.items[i].attendees) {
-      freeEvents.push(events.data.items[i]);
+  if (events.data && events.data.items) {
+    for (let i = 0; i < events.data.items.length; i++) {
+      if (!events.data.items[i].attendees) {
+        freeEvents.push(events.data.items[i]);
+      }
     }
   }
   console.log(events);
   res.render("home", { events: freeEvents });
+};
+exports.getOccupiedByDay = async (req, res) => {
+  let day = req.body.day;
+  let date = Date.parse(day);
+  if (!day) {
+    console.log("No day");
+    return res.render("admin/panel", { events: [] });
+  }
+  const events = await calendar.getByDate(date);
+  console.log(req.body.day);
+  const occupied = [];
+  if (events.data && events.data.items) {
+    for (let i = 0; i < events.data.items.length; i++) {
+      if (events.data.items[i].attendees) {
+        occupied.push(events.data.items[i]);
+      }
+    }
+  }
+  console.log(occupied);
+  res.render("admin/panel", { events: occupied });
+};
+
+exports.book = async (req, res) => {
+  let id = req.body.id;
+  let email = req.body.email;
+  const data = await calendar.addAttendee(id, email);
+  console.log(data);
+  res.render("home", { events: [] });
+};
+
+exports.create = async (req, res) => {
+  let startInput = req.body.start;
+  let endInput = req.body.end;
+  if (!startInput || !endInput) {
+    return res.render("admin/panel", { events: [] });
+  }
+
+  const data = await calendar.create(
+    "Raccoon",
+    "",
+    new Date(startInput),
+    new Date(endInput),
+    "De Wingerd 2, 4003 EP Tiel"
+  );
+  console.log(data);
+  res.render("admin/panel", { events: [] });
 };

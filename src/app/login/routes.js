@@ -28,12 +28,16 @@ module.exports = (app) => {
       }
       res.render("admin/login");
     });
-  app.route("/admin/dashboard").get([verifyToken], (req, res) => {
-    res.render("admin/panel");
-  });
   app
-    .route("/admin/dashboard/:date")
-    .get([verifyToken], controller.getAvailableByDay);
+    .route("/admin/dashboard")
+    .get([verifyToken], (req, res) => {
+      res.render("admin/panel", { events: [] });
+    })
+    .post([verifyToken], controller.getOccupiedByDay);
+
+  app.route("/book").post(controller.book);
+
+  app.route("/admin/create").post([verifyToken], controller.create);
 
   app.get("/signout", [verifyToken], controller.signout);
 };
