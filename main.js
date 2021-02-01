@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
 const path = require("path");
 
 const app = express();
@@ -19,10 +20,6 @@ db.sequelize.sync({ force: true }).then(() => {
   initial();
 });
 
-app.get("/", (req, res) => {
-  res.render("home");
-});
-
 // Routes
 require("./src/app/login/routes")(app);
 
@@ -36,12 +33,12 @@ function initial() {
     firstName: "Roelie",
     lastName: "Janssen",
     email: "info@voetreflexraccoon.nl",
-    password: "ditisnietveilig",
+    password: bcrypt.hashSync("ditisnietveilig", 8),
   });
   User.create({
     firstName: "Jesper",
     lastName: "van Daatselaar",
     email: "1002003@hr.nl",
-    password: "ditisnietveilig",
+    password: bcrypt.hashSync("ditisnietveilig", 8),
   });
 }
