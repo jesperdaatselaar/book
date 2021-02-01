@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Document</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma-rtl.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
   <script src="https://kit.fontawesome.com/6c19e31162.js" crossorigin="anonymous"></script>
 </head>
 
@@ -20,32 +20,34 @@
     <div class="columns is-centered">
       <div class="column is-4">
         <h1 class="title is-5">Inloggen als <b>administrator</b></h1>
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control has-icons-left">
-            <input class="input" type="password" />
-            <span class="icon is-small is-left">
-              <i class="fas fa-at"></i>
-            </span>
+        <form action="/admin/signin" method="post">
+          <div class="field">
+            <label class="label">Email</label>
+            <div class="control has-icons-left">
+              <input name="email" class="input" type="email" />
+              <span class="icon is-small is-left">
+                <i class="fas fa-at"></i>
+              </span>
+            </div>
           </div>
-        </div>
-        <div class="field">
-          <label class="label">Wachtwoord</label>
-          <div class="control has-icons-left">
-            <input class="input" type="password" />
-            <span class="icon is-small is-left">
-              <i class="fas fa-fingerprint"></i>
-            </span>
+          <div class="field">
+            <label class="label">Wachtwoord</label>
+            <div class="control has-icons-left">
+              <input name="password" class="input" type="password" />
+              <span class="icon is-small is-left">
+                <i class="fas fa-fingerprint"></i>
+              </span>
+            </div>
           </div>
-        </div>
-        <div class="field is-grouped">
-          <div class="control">
-            <a class="button is-link">Inloggen</a>
+          <div class="field is-grouped">
+            <div class="control">
+              <input type="submit" class="button is-link" value="Inloggen">
+            </div>
+            <div class="control">
+              <a href="/" class="button is-link is-light">Terug</a>
+            </div>
           </div>
-          <div class="control">
-            <a class="button is-link is-light">Terug</a>
-          </div>
-        </div>
+        </form>
       </div>
     </div>
   </section>
