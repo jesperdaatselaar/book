@@ -25,7 +25,9 @@ exports.signin = (req, res) => {
   })
     .then((user) => {
       if (!user) {
-        return res.status(404).render("admin/login");
+        return res
+          .status(404)
+          .render("admin/login", { error: "Gebruiker niet gevonden" });
       }
 
       let passwordIsValid = bcrypt.compareSync(
@@ -34,7 +36,9 @@ exports.signin = (req, res) => {
       );
 
       if (!passwordIsValid) {
-        return res.status(403).render("admin/login");
+        return res
+          .status(403)
+          .render("admin/login", { error: "Onjuiste inloggevens" });
       }
 
       let token = jwt.sign({ id: user.id }, config.secret, {
@@ -44,11 +48,11 @@ exports.signin = (req, res) => {
         maxAge: 900000, // Lifetime
       });
       res.status(200).redirect(`/admin/dashboard`);
-      console.log(token);
     })
     .catch((err) => {
-      console.log(err);
-      res.status(500).redirect("/admin/signin");
+      res.status(500).redirect("/admin/signin", {
+        error: "Onbekende fout opgetreden" + err,
+      });
     });
 };
 
@@ -61,11 +65,12 @@ exports.getAvailableByDay = async (req, res) => {
   let day = req.body.day;
   let date = Date.parse(day);
   if (!day) {
-    console.log("No day");
-    return res.render("home", { events: [] });
+    return res.render("home", {
+      events: [],
+      error: "No date has been specified",
+    });
   }
   const events = await calendar.getByDate(date);
-  console.log(req.body.day);
   const freeEvents = [];
   if (events.data && events.data.items) {
     for (let i = 0; i < events.data.items.length; i++) {
@@ -74,18 +79,15 @@ exports.getAvailableByDay = async (req, res) => {
       }
     }
   }
-  console.log(events);
-  res.render("home", { events: freeEvents });
+  res.render("home", { events: freeEvents, error: undefined });
 };
 exports.getOccupiedByDay = async (req, res) => {
   let day = req.body.day;
   let date = Date.parse(day);
   if (!day) {
-    console.log("No day");
-    return res.render("admin/panel", { events: [] });
+    return res.render("admin/panel", { events: [], error: "No day" });
   }
   const events = await calendar.getByDate(date);
-  console.log(req.body.day);
   const occupied = [];
   if (events.data && events.data.items) {
     for (let i = 0; i < events.data.items.length; i++) {
@@ -94,23 +96,29 @@ exports.getOccupiedByDay = async (req, res) => {
       }
     }
   }
-  console.log(occupied);
-  res.render("admin/panel", { events: occupied });
+  res.render("admin/panel", { events: occupied, error: undefined });
 };
 
 exports.book = async (req, res) => {
   let id = req.body.id;
   let email = req.body.email;
-  const data = await calendar.addAttendee(id, email);
-  console.log(data);
-  res.render("home", { events: [] });
+  let type = req.body.type;
+  let name = req.body.name;
+  const data = await calendar.addAttendee(id, email, type, name);
+  res.render("home", {
+    events: [],
+    error: "Afspraak is aangemaakt. U ontvangt een email",
+  });
 };
 
 exports.create = async (req, res) => {
   let startInput = req.body.start;
   let endInput = req.body.end;
   if (!startInput || !endInput) {
-    return res.render("admin/panel", { events: [] });
+    return res.render("admin/panel", {
+      events: [],
+      error: "Er ontbreken gegevens",
+    });
   }
 
   const data = await calendar.create(
@@ -120,6 +128,50 @@ exports.create = async (req, res) => {
     new Date(endInput),
     "De Wingerd 2, 4003 EP Tiel"
   );
-  console.log(data);
-  res.render("admin/panel", { events: [] });
+  res.render("admin/panel", {
+    events: [],
+    error: "Het gespecificeerde tijdslot is aangemaakt",
+  });
+};
+
+exports.cancel = async (req, res) => {
+  let id = req.body.id;
+  // console.log(id);
+  let given = await calendar.getById(id);
+  const day = new Date(given.data.start.dateTime);
+  await calendar.removeAttendee(id);
+  const events = await calendar.getByDate(Date.parse(day));
+  const occupied = [];
+  if (events.data && events.data.items) {
+    for (let i = 0; i < events.data.items.length; i++) {
+      if (events.data.items[i].attendees) {
+        occupied.push(events.data.items[i]);
+      }
+    }
+  }
+  res.render("admin/panel", {
+    events: occupied,
+    error: "Afspraak succesvol geannuleerd",
+  });
+};
+
+exports.delete = async (req, res) => {
+  let id = req.body.id;
+  let given = await calendar.getById(id);
+  const day = new Date(given.data.start.dateTime);
+  await calendar.delete(id);
+  const events = await calendar.getByDate(Date.parse(day));
+  const occupied = [];
+  if (events.data && events.data.items) {
+    for (let i = 0; i < events.data.items.length; i++) {
+      if (events.data.items[i].attendees) {
+        occupied.push(events.data.items[i]);
+      }
+    }
+  }
+  console.log(occupied);
+  res.render("admin/panel", {
+    events: occupied,
+    error: "Afspraak succesvol verwijderd",
+  });
 };

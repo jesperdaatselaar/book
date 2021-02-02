@@ -19,38 +19,55 @@
   <section class="section">
     <div class="columns is-centered">
       <div class="column is-4">
-        <h1 class="title is-5">Inloggen als <b>administrator</b></h1>
-        <form action="/admin/signin" method="post">
-          <div class="field">
-            <label class="label">Email</label>
-            <div class="control has-icons-left">
-              <input name="email" class="input" type="email" />
-              <span class="icon is-small is-left">
-                <i class="fas fa-at"></i>
-              </span>
-            </div>
+        <% if (error) { %>
+          <div class="notification is-info">
+            <button class="delete"></button>
+            <%= error %>
           </div>
-          <div class="field">
-            <label class="label">Wachtwoord</label>
-            <div class="control has-icons-left">
-              <input name="password" class="input" type="password" />
-              <span class="icon is-small is-left">
-                <i class="fas fa-fingerprint"></i>
-              </span>
-            </div>
-          </div>
-          <div class="field is-grouped">
-            <div class="control">
-              <input type="submit" class="button is-link" value="Inloggen">
-            </div>
-            <div class="control">
-              <a href="/" class="button is-link is-light">Terug</a>
-            </div>
-          </div>
-        </form>
+          <% } %>
+            <h1 class="title is-5">Inloggen als <b>administrator</b></h1>
+            <form action="/admin/signin" method="post">
+              <div class="field">
+                <label class="label">Email</label>
+                <div class="control has-icons-left">
+                  <input name="email" class="input" type="email" />
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-at"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Wachtwoord</label>
+                <div class="control has-icons-left">
+                  <input name="password" class="input" type="password" />
+                  <span class="icon is-small is-left">
+                    <i class="fas fa-fingerprint"></i>
+                  </span>
+                </div>
+              </div>
+              <div class="field is-grouped">
+                <div class="control">
+                  <input type="submit" class="button is-link" value="Inloggen">
+                </div>
+                <div class="control">
+                  <a href="/" class="button is-link is-light">Terug</a>
+                </div>
+              </div>
+            </form>
       </div>
     </div>
   </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+        const $notification = $delete.parentNode;
+
+        $delete.addEventListener('click', () => {
+          $notification.parentNode.removeChild($notification);
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

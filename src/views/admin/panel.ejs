@@ -28,39 +28,45 @@
     <section class="section">
         <div class="columns is-variable is-8 is-centered">
             <div class="column is-3">
-                <h1 class="title is-5">Zoek afspraken</b></h1>
-                <form action="/admin/dashboard/" method="post">
-                    <label class="label">Dag</label>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <input id="dateInput" name="day" class="input" type="date" />
-                        </div>
-                        <div class="control">
-                            <input class="button is-info" type="submit" value="Zoek" />
-                        </div>
+                <% if (error) { %>
+                    <div class="notification is-info">
+                        <button class="delete"></button>
+                        <%= error %>
                     </div>
-                </form>
-                <br>
-                <h1 class="title is-5">Maak een tijdslot</b></h1>
-                <form action="/admin/create" method="POST">
-                    <label class="label">Van</label>
-                    <div class="field">
-                        <div class="control">
-                            <input name="start" class="input" type="datetime-local" />
-                        </div>
-                    </div>
-                    <label class="label">Tot</label>
-                    <div class="field">
-                        <div class="control">
-                            <input name="end" class="input" type="datetime-local" />
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <input class="button is-info" type="submit" value="Maak" />
-                        </div>
-                    </div>
-                </form>
+                    <% } %>
+                        <h1 class="title is-5">Zoek afspraken</b></h1>
+                        <form action="/admin/dashboard/" method="post">
+                            <label class="label">Dag</label>
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <input id="dateInput" name="day" class="input" type="date" />
+                                </div>
+                                <div class="control">
+                                    <input class="button is-info" type="submit" value="Zoek" />
+                                </div>
+                            </div>
+                        </form>
+                        <br>
+                        <h1 class="title is-5">Maak een tijdslot</b></h1>
+                        <form action="/admin/create" method="POST">
+                            <label class="label">Van</label>
+                            <div class="field">
+                                <div class="control">
+                                    <input name="start" class="input" type="datetime-local" />
+                                </div>
+                            </div>
+                            <label class="label">Tot</label>
+                            <div class="field">
+                                <div class="control">
+                                    <input name="end" class="input" type="datetime-local" />
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <input class="button is-info" type="submit" value="Maak" />
+                                </div>
+                            </div>
+                        </form>
             </div>
             <div class="column is-6">
                 <h1 class="title is-5">Gevonden afspraken</h1>
@@ -72,36 +78,60 @@
                             <th>Naam</th>
                             <th>Email</th>
                             <th>Behandeling</th>
+                            <th>Annuleren</th>
+                            <th>Verwijderen</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <% console.log(events) %>
-                            <% if (events.length> 0) { %>
-                                <% for(var i=0; i < events.length; i++) { %>
-                                    <tr>
-                                        <td>
-                                            <%= new Date(events[i].start.dateTime).toLocaleDateString() %>
-                                        </td>
-                                        <td>
-                                            <%= new Date(events[i].start.dateTime).toLocaleTimeString() %>
-                                        </td>
-                                        <td>
-                                            No Name
-                                        </td>
-                                        <td>
-                                            <%= events[i].attendees[0].email %>
-                                        </td>
-                                        <td>
-                                            <%= events[i].summary %>
-                                        </td>
-                                    </tr>
+                        <% if (events.length> 0) { %>
+                            <% for(var i=0; i < events.length; i++) { %>
+                                <tr>
+                                    <td>
+                                        <%= new Date(events[i].start.dateTime).toLocaleDateString() %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(events[i].start.dateTime).toLocaleTimeString() %>
+                                    </td>
+                                    <td>
+                                        <%= events[i].description %>
+                                    </td>
+                                    <td>
+                                        <%= events[i].attendees[0].email %>
+                                    </td>
+                                    <td>
+                                        <%= events[i].summary %>
+                                    </td>
+                                    <td>
+                                        <form action="/admin/cancel" method="post">
+                                            <input name="id" type="hidden" value="<%=events[i].id%>">
+                                            <input class="button" type="submit" value="Annuleren">
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form action="/admin/delete" method="post">
+                                            <input name="id" type="hidden" value="<%=events[i].id%>">
+                                            <input class="button" type="submit" value="Verwijderen">
+                                        </form>
+                                    </td>
+                                </tr>
+                                <% } %>
                                     <% } %>
-                                        <% } %>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+                const $notification = $delete.parentNode;
+
+                $delete.addEventListener('click', () => {
+                    $notification.parentNode.removeChild($notification);
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

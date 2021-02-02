@@ -15,6 +15,7 @@ module.exports = (app) => {
     .get((req, res) => {
       res.render("home", {
         events: [],
+        error: undefined,
       });
     })
     .post(controller.getAvailableByDay);
@@ -26,18 +27,20 @@ module.exports = (app) => {
       if (req.user) {
         return res.redirect("/admin/dashboard");
       }
-      res.render("admin/login");
+      res.render("admin/login", { error: undefined });
     });
   app
     .route("/admin/dashboard")
     .get([verifyToken], (req, res) => {
-      res.render("admin/panel", { events: [] });
+      res.render("admin/panel", { events: [], error: undefined });
     })
     .post([verifyToken], controller.getOccupiedByDay);
 
   app.route("/book").post(controller.book);
 
   app.route("/admin/create").post([verifyToken], controller.create);
+  app.route("/admin/cancel").post([verifyToken], controller.cancel);
+  app.route("/admin/delete").post([verifyToken], controller.delete);
 
   app.get("/signout", [verifyToken], controller.signout);
 };

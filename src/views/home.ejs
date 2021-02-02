@@ -28,65 +28,71 @@
     <section class="section">
         <div class="columns is-variable is-8 is-centered">
             <div class="column is-3">
-                <h1 class="title is-5">Beschikbare tijdsloten</b></h1>
-                <form action="/" method="post">
-                    <label class="label">Dag</label>
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <input required name="day" class="input" type="date" />
-                        </div>
-                        <div class="control">
-                            <input class="button is-info" type="submit" value="Zoek" />
-                        </div>
+                <% if (error) { %>
+                    <div class="notification is-info">
+                        <button class="delete"></button>
+                        <%= error %>
                     </div>
-                </form>
-                <br>
-                <form action="/book" method="post">
-                    <div class="field is-grouped">
-                        <div class="control">
-                            <label class="label">Tijd</label>
-                            <div class="select">
-                                <select name="id" id="#">
-                                    <% if (events.length> 0) { %>
-                                        <% for(var i=0; i < events.length; i++) { %>
-                                            <option value="<%= events[i].id %>">
-                                                <%= new Date(events[i].start.dateTime).toLocaleTimeString() %>
-                                            </option>
-                                            <% } %>
-                                                <% } else { %>
-                                                    <option disabled>Geen beschikbaar</option>
+                    <% } %>
+                        <h1 class="title is-5">Beschikbare tijdsloten</b></h1>
+                        <form action="/" method="post">
+                            <label class="label">Dag</label>
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <input required name="day" class="input" type="date" />
+                                </div>
+                                <div class="control">
+                                    <input class="button is-info" type="submit" value="Zoek" />
+                                </div>
+                            </div>
+                        </form>
+                        <br>
+                        <form action="/book" method="post">
+                            <div class="field is-grouped">
+                                <div class="control">
+                                    <label class="label">Tijd</label>
+                                    <div class="select">
+                                        <select required name="id" id="#">
+                                            <% if (events.length> 0) { %>
+                                                <% for(var i=0; i < events.length; i++) { %>
+                                                    <option value="<%= events[i].id %>">
+                                                        <%= new Date(events[i].start.dateTime).toLocaleTimeString() %>
+                                                    </option>
                                                     <% } %>
-                                </select>
+                                                        <% } else { %>
+                                                            <option disabled>Geen beschikbaar</option>
+                                                            <% } %>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="control">
+                                    <label class="label">Behandeling</label>
+                                    <div class="select">
+                                        <select name="type" id="#">
+                                            <option value="acupunctuur">Acupunctuur</option>
+                                            <option value="voetreflex">Voetreflex</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="control">
-                            <label class="label">Behandeling</label>
-                            <div class="select">
-                                <select name="type" id="#">
-                                    <option value="1">Acupunctuur</option>
-                                    <option value="2">Voetreflex</option>
-                                </select>
+                            <div class="field">
+                                <label class="label">Naam</label>
+                                <div class="control">
+                                    <input required name="name" type="text" class="input">
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Naam</label>
-                        <div class="control">
-                            <input name="name" type="text" class="input">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">Email</label>
-                        <div class="control">
-                            <input name="email" type="text" class="input">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="control">
-                            <input class="button is-info" type="submit" value="Maak Afspraak" />
-                        </div>
-                    </div>
-                </form>
+                            <div class="field">
+                                <label class="label">Email</label>
+                                <div class="control">
+                                    <input name="email" type="text" class="input">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="control">
+                                    <input required class="button is-info" type="submit" value="Maak Afspraak" />
+                                </div>
+                            </div>
+                        </form>
             </div>
             <div class="column is-3">
                 <h1 class="title is-5">Openingstijden</h1>
@@ -106,6 +112,17 @@
             </div>
         </div>
     </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+                const $notification = $delete.parentNode;
+
+                $delete.addEventListener('click', () => {
+                    $notification.parentNode.removeChild($notification);
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>

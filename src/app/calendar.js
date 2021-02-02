@@ -46,7 +46,6 @@ class Event {
     }
   }
   async getByDate(date) {
-    console.log(date);
     try {
       return await this.calendar.events.list({
         auth: this.auth,
@@ -111,8 +110,10 @@ class Event {
     }
   }
 
-  async addAttendee(id, email) {
+  async addAttendee(id, email, type, name) {
     let details = {
+      summary: type || "Raccoon",
+      description: name || "No name",
       attendees: [
         {
           email: email,
