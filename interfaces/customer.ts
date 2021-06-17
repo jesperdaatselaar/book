@@ -1,8 +1,8 @@
-export interface BasicUser {
+export interface BasicCustomer {
   id: number;
 }
 
-export interface User extends BasicUser {
+export interface Customer extends BasicCustomer {
   firstName: string;
   lastName: string;
   email: string;

@@ -1,9 +1,9 @@
 import { BasicTimeslot, Timeslot } from "./timeslots";
-import { BasicUser, User } from "./user";
+import { BasicCustomer, Customer } from "./customer";
 
 export interface BasicAppointment {
   timeslot: BasicTimeslot;
-  user: BasicUser;
+  Customer: BasicCustomer;
 }
 
 export interface Appointment extends BasicAppointment {
@@ -12,5 +12,5 @@ export interface Appointment extends BasicAppointment {
 
 export interface DetailedAppointment extends BasicAppointment {
   timeslot: Timeslot;
-  user: User;
+  Customer: Customer;
 }
